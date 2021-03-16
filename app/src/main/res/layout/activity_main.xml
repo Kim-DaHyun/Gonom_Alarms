@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/main_activity_above_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/mainlogo_changeded"/>
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/main_activity_toolbar_division"
+        android:background="@color/colorDivision"
+        android:orientation="horizontal"
+        android:layout_below="@+id/main_activity_above_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <FrameLayout
+        android:id="@+id/main_activity_main_content"
+        android:layout_below="@id/main_activity_toolbar_division"
+        android:layout_above="@id/main_activity_nav_division"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:id="@+id/main_activity_nav_division"
+        android:background="@color/colorDivision"
+        android:orientation="horizontal"
+        android:layout_above="@id/main_activity_bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/main_activity_bottom_navigation"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/main_a_bottom_navigation"
+        app:labelVisibilityMode="unlabeled"/>
+</RelativeLayout>

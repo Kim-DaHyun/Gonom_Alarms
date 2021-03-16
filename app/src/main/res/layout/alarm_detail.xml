@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="150dp">
+    <LinearLayout
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+        <TextView
+            android:id="@+id/detail_time"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_width="120dp"
+            android:textSize="40sp"
+            android:text=""
+            android:layout_height="50dp"/>
+        <TextView
+            android:id="@+id/detail_title"
+            android:layout_marginStart="30dp"
+            android:textSize="15sp"
+            android:text=""
+            android:layout_width="match_parent"
+            android:layout_height="30dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/days_picker"
+            android:layout_width="250dp"
+            android:weightSum="40"
+            android:layout_height="30dp">
+
+            <ImageView
+                android:id="@+id/detail_days_picker_monday"
+                android:src="@drawable/monday"
+                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <ImageView
+                android:id="@+id/detail_days_picker_tuesday"
+                android:src="@drawable/tuesday"
+                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <ImageView
+                android:id="@+id/_detail_days_picker_wednesday"
+                android:src="@drawable/wednesday"
+                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <ImageView
+                android:id="@+id/detail_days_picker_thursday"
+                android:src="@drawable/thursday"
+                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <ImageView
+                android:id="@+id/detail_days_picker_friday"
+                android:src="@drawable/friday"
+                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <ImageView
+                android:id="@+id/detail_days_picker_saturday"
+                android:src="@drawable/saturday"
+                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2" />
+
+            <ImageView
+                android:id="@+id/detail_days_picker_sunday"
+                android:src="@drawable/sunday"
+                android:scaleType="centerInside"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="4" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:background="@color/colorWhite"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/colorDivision"/>
+</LinearLayout>

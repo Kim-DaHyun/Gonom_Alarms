@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Sharlam</string>
+    <string name="signin_google">Google login</string>
+    <string name="signin_naver">Naver login</string>
+    <string name="signin_kakao">Kakao login</string>
+
+    <string name="string_single">my alarms</string>
+    <string name="string_share">shared alarms</string>
+    <string name="string_song">songs</string>
+    <string name="string_setting">setting</string>
+
+    <string name="project_name">고놈 Project</string>
+</resources>

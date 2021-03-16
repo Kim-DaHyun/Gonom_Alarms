@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "130877507293",
+    "project_id": "sharlam-ccb46",
+    "storage_bucket": "sharlam-ccb46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130877507293:android:fea6cd042d92efae48fd34",
+        "android_client_info": {
+          "package_name": "com.example.sharlam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130877507293-cvj541p7al39clnfe0rm6fuhp9rg9dvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3mgDvHLIkUsFxnKLNqlbFbsQl2vf5TiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "130877507293-cvj541p7al39clnfe0rm6fuhp9rg9dvq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
