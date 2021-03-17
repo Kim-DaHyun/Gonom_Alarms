@@ -8,12 +8,15 @@ import androidx.room.PrimaryKey
 data class SAlarmEntitiy(
 
     @PrimaryKey
-    var TimeStamp : Long?,
+    var TimeStamp : Long = 0,
     var title : String = "",
     var SoundUrl : String = "",
-    var Targethours : Int?,
-    var Targetminutes : Int?,
-    var TargetDays : Array<Boolean>? = Array(7) { false },
+    var Targethours : Int = 0,
+    var Targetminutes : Int = 0,
+    var TargetDays : Byte = 0,
+
     @ColumnInfo(name = "targetnums")
-    var TargetNums : Array<String>? = arrayOf()
+    var TargetNums : Array<String> = arrayOf(),
+    @ColumnInfo(name = "ktargetnums")
+    var KTargetNums : Array<String> = arrayOf()
 )

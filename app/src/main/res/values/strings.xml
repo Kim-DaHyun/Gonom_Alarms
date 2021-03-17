@@ -10,4 +10,9 @@
     <string name="string_setting">setting</string>
 
     <string name="project_name">고놈 Project</string>
+
+    <string name="time_setting">시간 설정</string>
+    <string name="alarm_repeat">반복</string>
+    <string name="alarm_content">알람 내용</string>
+    <string name="alarm_content_hint">무슨 일로 일어나시나요?</string>
 </resources>

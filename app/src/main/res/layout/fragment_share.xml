@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#AA2244">
+    android:background="#C8C8C8">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/share_frag_detailgroup_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <ImageView
+        android:id="@+id/share_frag_background_image"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/share_group_background"
+        android:contentDescription="TODO" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:weightSum="10"
+        android:layout_below="@+id/share_frag_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/share_fragment_background_division"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:orientation="vertical" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/share_fragement_add_alarm_btn"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:elevation="60dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/plus_button"
+            android:contentDescription="TODO" />
+
+    </LinearLayout>
+</RelativeLayout>

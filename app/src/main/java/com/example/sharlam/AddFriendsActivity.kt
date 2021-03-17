@@ -26,8 +26,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sharlam.navigation.model.PhoneBook
 import com.kakao.sdk.talk.TalkApiClient
+import com.kakao.sdk.talk.model.FriendOrder
 import java.security.Permission
 import java.security.Permissions
 
@@ -39,26 +41,24 @@ class AddFriendsActivity : AppCompatActivity() {
 
     var thumbnails : MutableList<String?> = arrayListOf()
     var nicknames : MutableList<String> = arrayListOf()
+    var uuid : MutableList<String> = arrayListOf()
+
     var PhoneBooks : MutableList<PhoneBook> = arrayListOf()
     var friends_size : Int = 0
     var checkedList : MutableList<Boolean>? = null
+    var k_checkedList : MutableList<Boolean>? = null
+
     var outlist : Array<String> = arrayOf()
+    var k_outlist : Array<String> = arrayOf()
+
+
+    var ABC : Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_friends)
-
-
-        callPermission()
-    }
-
-    @SuppressLint("CutPasteId")
-    fun Activitys(){
-        PhoneBooks = getContacts(this)
-        checkedList = MutableList(PhoneBooks.size) { false }
-
-        Toast.makeText(this, PhoneBooks.size.toString(), Toast.LENGTH_SHORT).show()
-        TalkApiClient.instance.friends { friends, error ->
+        TalkApiClient.instance.friends(friendOrder=FriendOrder.FAVORITE) { friends, error ->
             if (error != null) {
                 Toast.makeText(this, "친구 목록 불러오기 실패: ${error}", Toast.LENGTH_LONG).show()
                 finish()
@@ -67,10 +67,24 @@ class AddFriendsActivity : AppCompatActivity() {
                 for (friend in friends.elements) {
                     thumbnails.add(friend.profileThumbnailImage)
                     nicknames.add(friend.profileNickname)
+                    uuid.add(friend.uuid)
                 }
-
+                k_checkedList = MutableList(friends_size) { false }
+                Toast.makeText(this,"친구목록가져옴"+friends_size.toString(),Toast.LENGTH_SHORT).show()
             }
+            callPermission()
         }
+
+    }
+
+    @SuppressLint("CutPasteId")
+    fun Activitys(){
+        PhoneBooks = getContacts(this)
+        checkedList = MutableList(PhoneBooks.size) { false }
+
+        Toast.makeText(this, PhoneBooks.size.toString(), Toast.LENGTH_SHORT).show()
+
+
         findViewById<RecyclerView>(R.id.detailview_add_kfriends).adapter = DetailViewRecyclerViewAdapter()
         findViewById<RecyclerView>(R.id.detailview_add_kfriends).layoutManager = LinearLayoutManager(this)
 
@@ -79,12 +93,58 @@ class AddFriendsActivity : AppCompatActivity() {
 
             val resultIntent = Intent()
             resultIntent.putExtra("TargetNums", outlist)
+            resultIntent.putExtra("KTargetNums",k_outlist)
             setResult(RESULT_OK, resultIntent)
 
             finish()
         }
+        findViewById<ImageView>(R.id.add_member_btn).setOnLongClickListener {
+            if(ABC){
+                findViewById<RecyclerView>(R.id.detailview_add_kfriends).adapter = DetailViewRecyclerViewAdapter()
+                findViewById<RecyclerView>(R.id.detailview_add_kfriends).layoutManager = LinearLayoutManager(this)
+            }else{
+                findViewById<RecyclerView>(R.id.detailview_add_kfriends).adapter = KDetailViewRecyclerViewAdapter()
+                findViewById<RecyclerView>(R.id.detailview_add_kfriends).layoutManager = LinearLayoutManager(this)
+            }
+
+            ABC = !ABC
+            Toast.makeText(this,friends_size.toString(),Toast.LENGTH_SHORT).show()
+            true
+        }
+
+
     }
 
+    inner class KDetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            var view = LayoutInflater.from(parent.context).inflate(R.layout.kfriends_detail, parent, false)
+            return KCustomViewHolder(view)
+        }
+
+        inner class KCustomViewHolder(view : View?) : RecyclerView.ViewHolder(view!!){
+            var checkbox : CheckBox = view!!.findViewById(R.id.kfriends_checkbox)
+            var textview : TextView = view!!.findViewById(R.id.kfriends_name)
+            var imageview : ImageView = view!!.findViewById(R.id.kfriends_image)
+
+            fun bind(data1 : MutableList<String?>,data2 : MutableList<String>, data3 : MutableList<Boolean>, num : Int, context : Context) {
+                textview.text = data2[num]
+                Glide.with(context).load(data1[num]).into(imageview)
+                checkbox.isChecked = data3[num]
+                checkbox.setOnClickListener {
+                    k_checkedList!![num] = checkbox.isChecked
+                }
+            }
+
+        }
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            (holder as KCustomViewHolder).bind(thumbnails,nicknames,k_checkedList!!,position,holder.itemView.context)
+        }
+
+        override fun getItemCount(): Int {
+            return friends_size
+        }
+
+    }
     inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             var view = LayoutInflater.from(parent.context).inflate(R.layout.kfriends_detail, parent, false)
@@ -116,24 +176,20 @@ class AddFriendsActivity : AppCompatActivity() {
 
     }
 
-    
+
     fun sendSMS(){
         for(position in 0 until checkedList!!.size){
             if(checkedList!![position]==true){
                 outlist = outlist.plus(PhoneBooks[position].number!!)
-//                try {
-//                    A += 1
-//                    //전송
-//                    val smsManager: SmsManager = SmsManager.getDefault()
-//                    smsManager.sendTextMessage(PhoneBooks[position].number, null, "확인용", null, null)
-//                    Toast.makeText(applicationContext, "전송 완료!", Toast.LENGTH_LONG).show()
-//                } catch (e: Exception) {
-//                    Toast.makeText(applicationContext, "SMS faild, please try again later!", Toast.LENGTH_LONG).show()
-//                    e.printStackTrace()
-//                }
+            }
+        }
+        for(position in 0 until k_checkedList!!.size){
+            if(k_checkedList!![position]==true){
+                k_outlist = k_outlist.plus(uuid[position])
             }
         }
     }
+
     fun callPermission(){
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             Activitys()

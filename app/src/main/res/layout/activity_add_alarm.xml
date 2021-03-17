@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".AddAlarmActivity">
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
+        android:id="@+id/addalarm_activity_above_toolbar"
         android:layout_width="match_parent"
         android:layout_height="35dp">
         <ImageView
@@ -16,9 +16,9 @@
             android:src="@drawable/mainlogo_changeded"/>
     </androidx.appcompat.widget.Toolbar>
     <LinearLayout
-        android:id="@+id/toolbar_division"
+        android:id="@+id/addalarm_activity_toolbar_division"
         android:background="@color/colorDivision"
-        android:layout_below="@+id/my_toolbar"
+        android:layout_below="@+id/addalarm_activity_above_toolbar"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
@@ -26,42 +26,42 @@
     <TextView
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="시간 설정"
+        android:text="@string/time_setting"
         android:textSize="20sp"
-        android:layout_below="@id/toolbar_division"
+        android:layout_below="@id/addalarm_activity_toolbar_division"
         android:layout_marginTop="15dp"
         android:layout_marginStart="15dp"/>
     <TimePicker
         android:timePickerMode="spinner"
-        android:id="@+id/time_picker"
-        android:layout_below="@id/toolbar_division"
+        android:id="@+id/addalarm_time_picker"
+        android:layout_below="@id/addalarm_activity_toolbar_division"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:amPmBackgroundColor="#3CCA75"
         android:numbersSelectorColor="#3CCA75"
         android:theme="@style/DefaultNumberPickerTheme" />
     <LinearLayout
-        android:id="@+id/alarm_division"
+        android:id="@+id/addalarm_activity_timepicker_ivision"
         android:background="@color/colorDivision"
-        android:layout_below="@id/time_picker"
+        android:layout_below="@id/addalarm_time_picker"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="1dp"/>
     <TextView
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="반복"
+        android:text="@string/alarm_repeat"
         android:textSize="20sp"
-        android:layout_below="@+id/alarm_division"
+        android:layout_below="@+id/addalarm_activity_timepicker_ivision"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"/>
     <LinearLayout
         android:layout_marginTop="40dp"
         android:orientation="horizontal"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="15dp"
         android:id="@+id/days_picker"
-        android:layout_below="@id/alarm_division"
+        android:layout_below="@id/addalarm_activity_timepicker_ivision"
         android:layout_width="match_parent"
         android:weightSum="40"
         android:layout_height="40dp">
@@ -154,7 +154,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/days_division"
+        android:id="@+id/addalarm_activity_days_division"
         android:orientation="horizontal"
         android:background="@color/colorDivision"
         android:layout_width="match_parent"
@@ -166,14 +166,14 @@
     <TextView
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="알람 내용"
+        android:text="@string/alarm_content"
         android:textSize="20sp"
-        android:layout_below="@+id/days_division"
+        android:layout_below="@+id/addalarm_activity_days_division"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"/>
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/layout_alarm_title"
-        android:layout_below="@+id/days_division"
+        android:id="@+id/addalarm_activity_layout_alarm_title"
+        android:layout_below="@+id/addalarm_activity_days_division"
         android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -182,39 +182,34 @@
         <EditText
             android:singleLine="true"
             android:maxLength="10"
-            android:id="@+id/alarm_title"
+            android:id="@+id/addalarm_activity_alarm_title"
             android:text=""
-            android:hint="무슨 일로 일어나시나요?"
+            android:hint="@string/alarm_content_hint"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:autofillHints="@string/alarm_content_hint"/>
     </com.google.android.material.textfield.TextInputLayout>
     <LinearLayout
-        android:id="@+id/title_division"
+        android:id="@+id/addalarm_activity_title_division"
         android:orientation="horizontal"
         android:background="@color/colorDivision"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/layout_alarm_title"
+        android:layout_below="@id/addalarm_activity_layout_alarm_title"
         android:layout_marginTop="20dp"/>
     <TextView
-        android:id="@+id/kakao_friends_button"
-        android:layout_below="@id/title_division"
+        android:id="@+id/addalarm_activity_kakao_friends_button"
+        android:layout_below="@id/addalarm_activity_title_division"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_width="150dp"
         android:layout_height="30dp"
-        android:text="깨워줄 사람 추가"
+        android:text=""
         android:gravity="center"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:background="#fef01b"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/kakao_friends_button"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:scrollbars="horizontal"/>
     <ImageView
-        android:id="@+id/btn_complete_add_alarm"
+        android:id="@+id/addalarm_activity_complete_addalarm_btn"
         android:layout_width="80dp"
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"

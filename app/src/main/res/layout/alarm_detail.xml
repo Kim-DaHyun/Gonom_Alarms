@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:background="@color/colorWhite"
     android:layout_height="150dp">
     <LinearLayout
         android:background="@color/colorWhite"
@@ -25,11 +27,7 @@
             android:layout_height="30dp"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:background="@color/colorWhite"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
         <LinearLayout
 
             android:layout_marginTop="20dp"
@@ -49,11 +47,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
-
             <ImageView
                 android:id="@+id/detail_days_picker_tuesday"
                 android:src="@drawable/tuesday"
@@ -61,11 +54,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="4" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
 
             <ImageView
                 android:id="@+id/_detail_days_picker_wednesday"
@@ -75,11 +63,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
-
             <ImageView
                 android:id="@+id/detail_days_picker_thursday"
                 android:src="@drawable/thursday"
@@ -87,11 +70,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="4" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
 
             <ImageView
                 android:id="@+id/detail_days_picker_friday"
@@ -101,11 +79,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
-
             <ImageView
                 android:id="@+id/detail_days_picker_saturday"
                 android:src="@drawable/saturday"
@@ -113,11 +86,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="4" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2" />
 
             <ImageView
                 android:id="@+id/detail_days_picker_sunday"
@@ -127,7 +95,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4" />
         </LinearLayout>
-    </LinearLayout>
     <LinearLayout
         android:background="@color/colorWhite"
         android:layout_width="match_parent"

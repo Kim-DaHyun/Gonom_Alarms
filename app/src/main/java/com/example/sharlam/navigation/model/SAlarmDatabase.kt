@@ -3,7 +3,7 @@ package com.example.sharlam.navigation.model
 import android.content.Context
 import androidx.room.*
 
-@Database(entities = arrayOf(SAlarmEntitiy::class), version = 2)
+@Database(entities = arrayOf(SAlarmEntitiy::class), version = 4)
 @TypeConverters(Converters::class)
 abstract class SAlarmDatabase : RoomDatabase() {
     abstract fun salarmDAO() : SAlarmDAO

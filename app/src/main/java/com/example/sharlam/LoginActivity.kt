@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.sharlam.navigation.model.UserDTO
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -58,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
 
         //If already logged, skipping animation
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
-            if(error == null && tokenInfo != null) kakaoLogin()
+            if(error == null && tokenInfo != null) moveToMainPage()
             else animating()
         }
 
@@ -142,6 +143,16 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this,"위 버튼을 누르면 비 로그인으로 이용 가능합니다!",Toast.LENGTH_LONG).show()
         }
         else if (token != null) {
+            UserApiClient.instance.me{ user, error ->
+                firestore!!.collection("UserIDs").document(user!!.id.toString()).get().addOnSuccessListener { document ->
+                    if(!document.exists()){
+                        var userDTO = UserDTO()
+                        userDTO.accountTimeStamp = System.currentTimeMillis()
+                        userDTO.UserID = user!!.id.toString()
+                        firestore!!.collection("UserIDs").document(user!!.id.toString()).set(userDTO)
+                    }
+                }
+            }
             moveToMainPage()
         }
 

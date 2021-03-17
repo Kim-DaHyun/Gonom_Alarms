@@ -15,114 +15,170 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sharlam.navigation.model.AlarmDTO
 import com.example.sharlam.navigation.model.SAlarmDatabase
 import com.example.sharlam.navigation.model.SAlarmEntitiy
+import com.example.sharlam.navigation.model.UserDTO
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
+import kotlin.experimental.and
+import kotlin.experimental.or
+import kotlin.experimental.xor
 
 class AddAlarmActivity : AppCompatActivity() {
 
     var storage : FirebaseStorage? = null
     var firestore : FirebaseFirestore? = null
-    var TargetDays : MutableList<Boolean> = MutableList<Boolean>(7,{false})
 
-    var TargetD : Array<Boolean> = Array(7,{false})
-    var days : MutableList<ImageView> = mutableListOf()
-    var timepicker : TimePicker? = null
-    var Btn_Add_Alarm : ImageView? = null
-    var edittext : EditText?= null
+    lateinit var tp : TimePicker
+    lateinit var et : EditText
 
-    var TargetNums : Array<String>? = arrayOf()
+    val ADD_FRIENDS_REQUEST_CODE : Int = 101
+
+    var contactNums : Array<String> = arrayOf()
+    var kcontactNums : Array<String> = arrayOf()
+
+    var TargetDays : Byte = 0
+
+    var days_btns : MutableList<ImageView> = mutableListOf() // For the Mon, Tue, Wed.. Days Btn functions
 
     lateinit var db : SAlarmDatabase
-    var alarmList : List<SAlarmEntitiy> = listOf<SAlarmEntitiy>()
 
-
-    var logged : Boolean = false
+    var logged : Boolean = false // Btn and Background is changed depending on log in state
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_alarm)
-        db = SAlarmDatabase.getInstance(this)!!
+
         //Initiate storage
         storage = FirebaseStorage.getInstance()
         firestore = FirebaseFirestore.getInstance()
-        timepicker = findViewById(R.id.time_picker)
-        Btn_Add_Alarm = findViewById(R.id.btn_complete_add_alarm)
-        edittext = findViewById(R.id.alarm_title)
-        Btn_Add_Alarm?.setOnClickListener {
+        db = SAlarmDatabase.getInstance(this)!!
+
+        tp = findViewById(R.id.addalarm_time_picker)
+        et = findViewById(R.id.addalarm_activity_alarm_title)
+
+        this.findViewById<ImageView>(R.id.addalarm_activity_complete_addalarm_btn).setOnClickListener {
             alaramUpload()
         }
-        days.add(findViewById(R.id.days_picker_monday))
-        days[0].setOnClickListener { changedays(0) }
-        days.add(findViewById(R.id.days_picker_tuesday))
-        days[1].setOnClickListener { changedays(1) }
-        days.add(findViewById(R.id.days_picker_wednesday))
-        days[2].setOnClickListener { changedays(2) }
-        days.add(findViewById(R.id.days_picker_thursday))
-        days[3].setOnClickListener { changedays(3) }
-        days.add(findViewById(R.id.days_picker_friday))
-        days[4].setOnClickListener { changedays(4) }
-        days.add(findViewById(R.id.days_picker_saturday))
-        days[5].setOnClickListener { changedays(5) }
-        days.add(findViewById(R.id.days_picker_sunday))
-        days[6].setOnClickListener { changedays(6) }
+
+        //Set on ClickListener to Days
+        days_btns.add(findViewById(R.id.days_picker_monday))
+        days_btns.add(findViewById(R.id.days_picker_tuesday))
+        days_btns.add(findViewById(R.id.days_picker_wednesday))
+        days_btns.add(findViewById(R.id.days_picker_thursday))
+        days_btns.add(findViewById(R.id.days_picker_friday))
+        days_btns.add(findViewById(R.id.days_picker_saturday))
+        days_btns.add(findViewById(R.id.days_picker_sunday))
+        days_btns[0].setOnClickListener { changedays(0, ) }
+        days_btns[1].setOnClickListener { changedays(1) }
+        days_btns[2].setOnClickListener { changedays(2) }
+        days_btns[3].setOnClickListener { changedays(3) }
+        days_btns[4].setOnClickListener { changedays(4) }
+        days_btns[5].setOnClickListener { changedays(5) }
+        days_btns[6].setOnClickListener { changedays(6) }
 
 
+        //Get Kakao Login state
+        //Only Use With Kakao Login
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if(error == null && tokenInfo != null){
                 logged = true
-                this.findViewById<TextView>(R.id.kakao_friends_button).text = "친구 추가하기"
-                this.findViewById<TextView>(R.id.kakao_friends_button).setOnClickListener {
+                this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).text = "친구 추가하기"
+                this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).setOnClickListener {
 //                    Toast.makeText(this,"로딩중",Toast.LENGTH_SHORT).show()
-                    startActivityForResult(Intent(this, AddFriendsActivity::class.java),1)
+                    startActivityForResult(Intent(this, AddFriendsActivity::class.java),ADD_FRIENDS_REQUEST_CODE)
                 }
             }else{
                 logged = false
-                this.findViewById<TextView>(R.id.kakao_friends_button).text = "카카오 로그인하기"
-                this.findViewById<TextView>(R.id.kakao_friends_button).setOnClickListener {
+                this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).text = "카카오 로그인하기"
+                this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).setOnClickListener {
                     kakaoLogin(this)
                 }
             }
         }
     }
 
+    fun changedays(index : Int){
+        TargetDays = TargetDays.xor(0x80.ushr(index).toByte())
+        Toast.makeText(this,TargetDays.toString(),Toast.LENGTH_SHORT).show()
+        if(TargetDays.and(0x80.ushr(index).toByte())!=0.toByte() ) {
+            days_btns[index].setColorFilter(Color.parseColor("#3CCA75"), PorterDuff.Mode.SRC_IN);
+        }
+        else{
+            days_btns[index].colorFilter = null
+        }
+
+    }
+
+    //KAKAO Login 1
+    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
+        if (error != null) {
+
+        }
+        else if (token != null) {
+            logged = true
+            this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).text = "친구 추가하기"
+            this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).setOnClickListener {
+                Toast.makeText(this,"로딩중",Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, AddFriendsActivity::class.java))
+            }
+            UserApiClient.instance.me{ user, error ->
+                firestore!!.collection("UserIDs").document(user!!.id.toString()).get().addOnSuccessListener { document ->
+                    if(!document.exists()){
+                        var userDTO = UserDTO()
+                        userDTO.accountTimeStamp = System.currentTimeMillis()
+                        userDTO.UserID = user!!.id.toString()
+                        firestore!!.collection("UserIDs").document(user!!.id.toString()).set(userDTO)
+                    }
+                }
+            }
+
+
+        }
+
+    }
+    //KAKAO Login 2
+    fun kakaoLogin(context: Context){
+        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
+            UserApiClient.instance.loginWithKakaoTalk(context, callback = callback)
+        } else {
+            UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
+        }
+    }
+
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == 1){
+        if(requestCode == ADD_FRIENDS_REQUEST_CODE){
             if(resultCode == RESULT_OK){
-                TargetNums = data!!.getSerializableExtra("TargetNums") as Array<String>
+                contactNums = data!!.getSerializableExtra("TargetNums") as Array<String>
+                kcontactNums = data!!.getSerializableExtra("KTargetNums") as Array<String>
             }
         }
     }
-    fun alaramUpload(){
+
+    private fun alaramUpload(){
         var alarmDTO = AlarmDTO()
-        if(edittext?.text.toString()==""){
+        if(et.text.toString()==""){
             alarmDTO.Title = "일어나세요!"
         }else{
-            alarmDTO.Title = edittext?.text.toString()
+            alarmDTO.Title = et.text.toString()
         }
         alarmDTO.SoundUrl = "test"
-        alarmDTO.TargetDays = TargetDays
-        alarmDTO.Targethours = timepicker?.hour
-        alarmDTO.Targetminutes = timepicker?.minute
+        alarmDTO.TargetDays = TargetDays.toInt()
+        alarmDTO.Targethours = tp.hour
+        alarmDTO.Targetminutes = tp.minute
         alarmDTO.Timestamp = System.currentTimeMillis()
         firestore?.collection("SingleAlarms")?.document()?.set(alarmDTO)
 
-        TargetD[0] = TargetDays[0]
-        TargetD[1] = TargetDays[1]
-        TargetD[2] = TargetDays[2]
-        TargetD[3] = TargetDays[3]
-        TargetD[4] = TargetDays[4]
-        TargetD[5] = TargetDays[5]
-        TargetD[6] = TargetDays[6]
 
-        if(edittext?.text.toString()=="") {
-            val Salarm = SAlarmEntitiy(System.currentTimeMillis(),"일어나세요","",timepicker?.hour,timepicker?.minute,TargetD,TargetNums)
+        if(et.text.toString()=="") {
+            val Salarm = SAlarmEntitiy(System.currentTimeMillis(),"일어나세요","", tp.hour, tp.minute, TargetDays,contactNums,kcontactNums)
             insertAlarm(Salarm)
         }else{
-            val Salarm = SAlarmEntitiy(System.currentTimeMillis(),edittext?.text.toString(),"",timepicker?.hour,timepicker?.minute,TargetD,TargetNums)
+            val Salarm = SAlarmEntitiy(System.currentTimeMillis(), et.text.toString(),"",tp.hour,tp.minute,TargetDays,contactNums,kcontactNums)
             insertAlarm(Salarm)
         }
 
@@ -130,15 +186,7 @@ class AddAlarmActivity : AppCompatActivity() {
         finish()
     }
 
-    fun changedays(index : Int){
-        if(TargetDays[index]==false) {
-            days[index].setColorFilter(Color.parseColor("#3CCA75"), PorterDuff.Mode.SRC_IN);
-        }
-        else{
-            days[index].setColorFilter(null)
-        }
-        TargetDays[index] = !TargetDays[index]
-    }
+
 
     @SuppressLint("StaticFieldLeak")
     fun insertAlarm(alarm : SAlarmEntitiy){
@@ -150,43 +198,4 @@ class AddAlarmActivity : AppCompatActivity() {
         insertTask.execute()
     }
 
-    val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
-        if (error != null) {
-
-        }
-        else if (token != null) {
-            logged = true
-            this.findViewById<TextView>(R.id.kakao_friends_button).text = "친구 추가하기"
-            this.findViewById<TextView>(R.id.kakao_friends_button).setOnClickListener {
-                Toast.makeText(this,"로딩중",Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, AddFriendsActivity::class.java))
-            }
-        }
-
-    }
-
-
-    fun kakaoLogin(context: Context){
-        if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
-            UserApiClient.instance.loginWithKakaoTalk(context, callback = callback)
-        } else {
-            UserApiClient.instance.loginWithKakaoAccount(context, callback = callback)
-        }
-    }
-
-    inner class DetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            TODO("Not yet implemented")
-        }
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            TODO("Not yet implemented")
-        }
-
-        override fun getItemCount(): Int {
-            TODO("Not yet implemented")
-        }
-
-    }
 }

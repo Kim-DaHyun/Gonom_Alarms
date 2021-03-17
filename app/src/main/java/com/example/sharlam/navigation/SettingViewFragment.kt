@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.sharlam.MainActivity
 import com.example.sharlam.R
+import com.example.sharlam.navigation.model.UserDTO
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
 import org.w3c.dom.Text
@@ -18,9 +20,11 @@ import org.w3c.dom.Text
 class SettingViewFragment : Fragment(){
 
     var logged : Boolean = false
+    var firestore : FirebaseFirestore? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = LayoutInflater.from(activity).inflate(R.layout.fragment_setting,container,false)
-
+        firestore = FirebaseFirestore.getInstance()
         UserApiClient.instance.accessTokenInfo { tokenInfo, error ->
             if(error == null && tokenInfo != null){
                 logged = true
@@ -59,6 +63,17 @@ class SettingViewFragment : Fragment(){
         }
         else if (token != null) {
             view!!.findViewById<TextView>(R.id.btn_log).text = "Logout"
+            UserApiClient.instance.me{ user, error ->
+                    firestore!!.collection("UserIDs").document(user!!.id.toString()).get().addOnSuccessListener { document ->
+                    if(!document.exists()){
+                        var userDTO = UserDTO()
+                        userDTO.accountTimeStamp = System.currentTimeMillis()
+                        userDTO.UserID = user!!.id.toString()
+                        firestore!!.collection("UserIDs").document(user!!.id.toString()).set(userDTO)
+                    }
+                }
+            }
+
         }
 
     }
