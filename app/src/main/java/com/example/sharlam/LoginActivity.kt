@@ -44,7 +44,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-
         /* 구글 로그인 비활성화
         var gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -118,6 +117,7 @@ class LoginActivity : AppCompatActivity() {
 
         //super.onBackPressed()
         if(System.currentTimeMillis()>backKeyPressedTime+2000){
+            Handler().removeCallbacksAndMessages(null)
             backKeyPressedTime = System.currentTimeMillis()
             toast?.show()
         }
@@ -150,12 +150,13 @@ class LoginActivity : AppCompatActivity() {
                         userDTO.accountTimeStamp = System.currentTimeMillis()
                         userDTO.UserID = user!!.id.toString()
                         firestore!!.collection("UserIDs").document(user!!.id.toString()).set(userDTO)
+                        moveToMainPage()
+                    }else{
+                        moveToMainPage()
                     }
                 }
             }
-            moveToMainPage()
         }
-
     }
 
 

@@ -5,38 +5,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddGroupActivity">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/main_activity_above_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/mainlogo_changeded"/>
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/toolbar_division"
+        android:background="@color/colorDivision"
+        android:layout_below="@id/main_activity_above_toolbar"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="1dp"/>
+    <ImageView
+        android:src="@drawable/logo_character"
+        android:id="@+id/addphoto_image"
+        android:layout_margin="8dp"
+        android:layout_below="@id/toolbar_division"
+        android:layout_width="100dp"
+        android:layout_height="100dp"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editText"
+        android:layout_below="@id/toolbar_division"
+        android:layout_toRightOf="@id/addphoto_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <EditText
             android:id="@+id/Addgroup_activity_add_group_name"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:hint="group이름"
+            android:text=""
+            android:hint="GROUP NAME"
             android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/Addgroup_activity_add_group_friend_btn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:background="#fef01b"
-            android:gravity="center"
-            android:text="친구추가"/>
-
-        <ImageView
-            android:id="@+id/Addgroup_activity_add_group_btn"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:elevation="60dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/plus_button"
-            android:contentDescription="TODO" />
-
-    </LinearLayout>
-
-
+    </com.google.android.material.textfield.TextInputLayout>
+    <ImageView
+        android:id="@+id/Addgroup_activity_add_group_friend_btn"
+        android:src="@drawable/kakao_logo"
+        android:layout_below="@id/editText"
+        android:layout_toRightOf="@id/Addgroup_activity_add_group_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+    <ImageView
+        android:layout_centerHorizontal="true"
+        android:id="@+id/Addgroup_activity_add_group_btn"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/editText"
+        android:elevation="60dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/plus_button"
+        android:contentDescription="TODO" />
 </RelativeLayout>

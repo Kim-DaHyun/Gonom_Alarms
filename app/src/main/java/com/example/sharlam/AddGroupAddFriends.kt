@@ -35,7 +35,7 @@ class AddGroupAddFriends : AppCompatActivity() {
 
             TalkApiClient.instance.friends(friendOrder= FriendOrder.FAVORITE) { friends, error ->
                 if (error != null) {
-                    Toast.makeText(this, "친구 목록 불러오기 실패: ${error}", Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this, "친구 목록 불러오기 실패: ${error}", Toast.LENGTH_LONG).show()
                     finish()
                 } else {
                     friends_size = friends!!.totalCount
@@ -45,7 +45,7 @@ class AddGroupAddFriends : AppCompatActivity() {
                         uuid.add(friend.id.toString())
                     }
                     k_checkedList = MutableList(friends_size) { false }
-                    Toast.makeText(this, "친구목록가져옴" + friends_size.toString(), Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, "친구목록가져옴" + friends_size.toString(), Toast.LENGTH_SHORT).show()
                     findViewById<RecyclerView>(R.id.Addgroup_detail_add_kfriends).adapter = KDetailViewRecyclerViewAdapter()
                     findViewById<RecyclerView>(R.id.Addgroup_detail_add_kfriends).layoutManager = LinearLayoutManager(this)
                     k_outlist = k_outlist.plus(user!!.id.toString())
@@ -73,6 +73,12 @@ class AddGroupAddFriends : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        overridePendingTransition(0,0)
+    }
+
     inner class KDetailViewRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             var view = LayoutInflater.from(parent.context).inflate(R.layout.kfriends_detail, parent, false)
@@ -86,7 +92,7 @@ class AddGroupAddFriends : AppCompatActivity() {
 
             fun bind(data1 : MutableList<String?>,data2 : MutableList<String>, data3 : MutableList<Boolean>, num : Int, context : Context) {
                 textview.text = data2[num]
-                Glide.with(context).load(data1[num]).into(imageview)
+                Glide.with(context).load(data1[num]).circleCrop().into(imageview)
                 checkbox.isChecked = data3[num]
                 checkbox.setOnClickListener {
                     k_checkedList!![num] = checkbox.isChecked

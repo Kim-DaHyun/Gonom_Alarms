@@ -21,7 +21,6 @@
         android:theme="@style/Theme.Sharlam">
         <activity android:name=".AddGroupAddFriends"></activity>
         <activity android:name=".AddGroupActivity" />
-        <activity android:name=".navigation.AddGroupActivity" />
         <activity android:name=".AddFriendsActivity">
             <intent-filter>
                 <data

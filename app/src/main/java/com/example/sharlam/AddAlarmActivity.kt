@@ -86,7 +86,9 @@ class AddAlarmActivity : AppCompatActivity() {
                 this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).text = "친구 추가하기"
                 this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).setOnClickListener {
 //                    Toast.makeText(this,"로딩중",Toast.LENGTH_SHORT).show()
-                    startActivityForResult(Intent(this, AddFriendsActivity::class.java),ADD_FRIENDS_REQUEST_CODE)
+                    val intent = Intent(this,AddFriendsActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                    startActivityForResult(intent,ADD_FRIENDS_REQUEST_CODE)
                 }
             }else{
                 logged = false
@@ -98,9 +100,14 @@ class AddAlarmActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        overridePendingTransition(0,0)
+    }
+
     fun changedays(index : Int){
         TargetDays = TargetDays.xor(0x80.ushr(index).toByte())
-        Toast.makeText(this,TargetDays.toString(),Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this,TargetDays.toString(),Toast.LENGTH_SHORT).show()
         if(TargetDays.and(0x80.ushr(index).toByte())!=0.toByte() ) {
             days_btns[index].setColorFilter(Color.parseColor("#3CCA75"), PorterDuff.Mode.SRC_IN);
         }
@@ -119,8 +126,11 @@ class AddAlarmActivity : AppCompatActivity() {
             logged = true
             this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).text = "친구 추가하기"
             this.findViewById<TextView>(R.id.addalarm_activity_kakao_friends_button).setOnClickListener {
-                Toast.makeText(this,"로딩중",Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, AddFriendsActivity::class.java))
+                //Toast.makeText(this,"로딩중",Toast.LENGTH_SHORT).show()
+                val intent = Intent(this,AddFriendsActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+
+                startActivity(intent)
             }
             UserApiClient.instance.me{ user, error ->
                 firestore!!.collection("UserIDs").document(user!!.id.toString()).get().addOnSuccessListener { document ->
@@ -160,6 +170,11 @@ class AddAlarmActivity : AppCompatActivity() {
     }
 
     private fun alaramUpload(){
+        if(TargetDays==0.toByte()){
+            Toast.makeText(this,"무슨 요일에 일어나는지 알려주세요!",Toast.LENGTH_SHORT).show()
+            return
+        }
+
         var alarmDTO = AlarmDTO()
         if(et.text.toString()==""){
             alarmDTO.Title = "일어나세요!"

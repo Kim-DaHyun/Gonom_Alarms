@@ -1,10 +1,7 @@
 package com.example.sharlam.navigation.model
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import androidx.room.Query
 
 @Dao
 interface SAlarmDAO {
@@ -18,4 +15,6 @@ interface SAlarmDAO {
     @Delete
     fun delete(alarm : SAlarmEntitiy)
 
+    @Query("UPDATE alarm SET TargetDays = :targetDays WHERE TimeStamp = :timeStamp")
+    fun update(timeStamp : Long, targetDays : Byte)
 }

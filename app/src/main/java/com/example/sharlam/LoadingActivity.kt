@@ -9,6 +9,10 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 
 
+
+
+
+
 class LoadingActivity : AppCompatActivity() {
 
     lateinit var iv : ImageView
@@ -21,7 +25,7 @@ class LoadingActivity : AppCompatActivity() {
 
         this.clickForTransform = false // Init
 
-        animating()
+        animating() // Start Animation
 
 
         //Skipping Animating Click Listener
@@ -31,7 +35,7 @@ class LoadingActivity : AppCompatActivity() {
             startLoginActivity()
         }
 
-        //After Animating
+        //After Animating  ( if works stopping animation being twice while loading startLoading Activity.
         Handler().postDelayed({
             if(!clickForTransform) {
                 startLoginActivity()
@@ -48,6 +52,7 @@ class LoadingActivity : AppCompatActivity() {
 
     // Start Loading Activity
     fun startLoginActivity(){
+        Handler().removeCallbacksAndMessages(null)
         val intent = Intent(this, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(Intent(this, LoginActivity::class.java))

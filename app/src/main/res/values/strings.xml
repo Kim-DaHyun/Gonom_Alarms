@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Sharlam</string>
+    <string name="app_name">고놈알람</string>
     <string name="signin_google">Google login</string>
     <string name="signin_naver">Naver login</string>
     <string name="signin_kakao">Kakao login</string>
@@ -15,4 +15,6 @@
     <string name="alarm_repeat">반복</string>
     <string name="alarm_content">알람 내용</string>
     <string name="alarm_content_hint">무슨 일로 일어나시나요?</string>
+    <string name="to_kakao_friends">카카오톡 불러오기</string>
+
 </resources>

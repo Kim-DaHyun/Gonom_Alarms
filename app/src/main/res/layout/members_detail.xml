@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="40dp">
+    android:layout_height="43dp">
 
     <LinearLayout
+        android:id="@+id/detail_layout"
         android:layout_width="match_parent"
         android:layout_height="40dp">
         <ImageView
@@ -18,4 +19,9 @@
             android:layout_height="match_parent"
             android:autoSizeTextType="uniform"/>
     </LinearLayout>
-</LinearLayout>
+    <LinearLayout
+        android:background="@color/colorDivision"
+        android:layout_below="@+id/detail_layout"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"/>
+</RelativeLayout>

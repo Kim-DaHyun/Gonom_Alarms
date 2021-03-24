@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.sharlam.AddFriendsActivity
 import com.example.sharlam.AddGroupActivity
 import com.example.sharlam.MainActivity
@@ -35,12 +36,12 @@ class ShareViewFragment : Fragment(){
     var storage : FirebaseStorage? = null
     var firestore : FirebaseFirestore? = null
     var GroupIDs : MutableList<String> = arrayListOf()
-
+    var GroupUrl : MutableList<String> = arrayListOf()
     val ADD_GROUP_REQUEST_CODE : Int = 103
 
     var uuid : Array<String> = arrayOf()
     var groupname : String = ""
-
+    var imageurl : String = ""
 
 
     override fun onAttach(context: Context) {
@@ -78,12 +79,17 @@ class ShareViewFragment : Fragment(){
                                 UserProperty.collection("GroupIDs").get()
                                     .addOnSuccessListener { documents ->
                                         for (document in documents) {
-                                            GroupIDs.add(document.get("groupName") as String)
+                                            val GName = document.get("groupName") as String
+                                            GroupIDs.add(GName)
+                                            firestore!!.collection("GroupAlarms").document(GName).get().addOnSuccessListener { Urldocument ->
+                                                GroupUrl.add(Urldocument.get("imageUrl") as String)
+                                                if(documents.size() == GroupUrl.size){
+                                                    view?.findViewById<RecyclerView>(R.id.share_frag_detailgroup_recyclerview)?.adapter = DetailViewRecylerViewAdapter()
+                                                    view?.findViewById<RecyclerView>(R.id.share_frag_detailgroup_recyclerview)?.layoutManager = LinearLayoutManager(activity)
+                                                }
+                                            }
                                         }
-                                        view?.findViewById<RecyclerView>(R.id.share_frag_detailgroup_recyclerview)?.adapter = DetailViewRecylerViewAdapter()
-                                        view?.findViewById<RecyclerView>(R.id.share_frag_detailgroup_recyclerview)?.layoutManager = LinearLayoutManager(activity)
                                     }
-
                                 view?.findViewById<ImageView>(R.id.share_frag_background_image)!!.visibility = View.INVISIBLE
                             }
                         }
@@ -99,7 +105,10 @@ class ShareViewFragment : Fragment(){
 
 
         view?.findViewById<ImageView>(R.id.share_fragement_add_alarm_btn)!!.setOnClickListener {
-            startActivityForResult(Intent(context, AddGroupActivity::class.java), ADD_GROUP_REQUEST_CODE)
+
+            val intent = Intent(context,AddGroupActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            startActivityForResult(intent, ADD_GROUP_REQUEST_CODE)
         }
 
 
@@ -112,7 +121,7 @@ class ShareViewFragment : Fragment(){
             if(resultCode == AppCompatActivity.RESULT_OK){
                 uuid = data!!.getSerializableExtra("KTargetNums") as Array<String>
                 groupname = data!!.getStringExtra("GroupName") + System.currentTimeMillis().toString()
-
+                imageurl = data!!.getStringExtra("uri")
                 for(uid in uuid) {
 
                     firestore!!.collection("UserIDs").document(uid).get().addOnSuccessListener { document ->
@@ -132,20 +141,23 @@ class ShareViewFragment : Fragment(){
 
                 }
                 var groupalarms = GroupAlarms()
+                groupalarms.imageUrl = imageurl
                 groupalarms.groupName = groupname
                 groupalarms.joinTimeStamp = System.currentTimeMillis()
                 groupalarms.members = uuid.toList()
                 firestore!!.collection("GroupAlarms").document(groupname).set(groupalarms)
                 GroupIDs.add(groupname)
+                GroupUrl.add(imageurl)
                 view?.findViewById<RecyclerView>(R.id.share_frag_detailgroup_recyclerview)?.adapter = DetailViewRecylerViewAdapter()
                 view?.findViewById<RecyclerView>(R.id.share_frag_detailgroup_recyclerview)?.layoutManager = LinearLayoutManager(activity)
             }
         }
     }
 
+
     inner class DetailViewRecylerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var ContentDTO = GroupIDs
-
+        var ContentDTOs = GroupUrl
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.group_detail,parent,false)
             return CustomViewHolder(view)
@@ -156,7 +168,9 @@ class ShareViewFragment : Fragment(){
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val viewholder = (holder as CustomViewHolder).itemView
 
+
             viewholder.findViewById<TextView>(R.id.Groupname).text = ContentDTO[position]
+            if(ContentDTOs[position]!="") Glide.with(viewholder.context).load(ContentDTOs[position]).into(viewholder.findViewById(R.id.Groupimage))
         }
 
         override fun getItemCount(): Int {

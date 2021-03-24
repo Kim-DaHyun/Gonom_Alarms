@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Color
+import android.media.Image
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -60,7 +62,7 @@ class AddFriendsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_friends)
         TalkApiClient.instance.friends(friendOrder=FriendOrder.FAVORITE) { friends, error ->
             if (error != null) {
-                Toast.makeText(this, "친구 목록 불러오기 실패: ${error}", Toast.LENGTH_LONG).show()
+                //Toast.makeText(this, "친구 목록 불러오기 실패: ${error}", Toast.LENGTH_LONG).show()
                 finish()
             } else {
                 friends_size = friends!!.totalCount
@@ -70,11 +72,17 @@ class AddFriendsActivity : AppCompatActivity() {
                     uuid.add(friend.uuid)
                 }
                 k_checkedList = MutableList(friends_size) { false }
-                Toast.makeText(this,"친구목록가져옴"+friends_size.toString(),Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this,"친구목록가져옴"+friends_size.toString(),Toast.LENGTH_SHORT).show()
             }
             callPermission()
         }
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        overridePendingTransition(0,0)
     }
 
     @SuppressLint("CutPasteId")
@@ -82,7 +90,7 @@ class AddFriendsActivity : AppCompatActivity() {
         PhoneBooks = getContacts(this)
         checkedList = MutableList(PhoneBooks.size) { false }
 
-        Toast.makeText(this, PhoneBooks.size.toString(), Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, PhoneBooks.size.toString(), Toast.LENGTH_SHORT).show()
 
 
         findViewById<RecyclerView>(R.id.detailview_add_kfriends).adapter = DetailViewRecyclerViewAdapter()
@@ -98,18 +106,18 @@ class AddFriendsActivity : AppCompatActivity() {
 
             finish()
         }
-        findViewById<ImageView>(R.id.add_member_btn).setOnLongClickListener {
+        findViewById<ImageView>(R.id.to_kakao_btn).setOnClickListener {
             if(ABC){
+                findViewById<ImageView>(R.id.to_kakao_btn).setBackgroundResource(R.drawable.kakao_logo)
                 findViewById<RecyclerView>(R.id.detailview_add_kfriends).adapter = DetailViewRecyclerViewAdapter()
                 findViewById<RecyclerView>(R.id.detailview_add_kfriends).layoutManager = LinearLayoutManager(this)
             }else{
+                findViewById<ImageView>(R.id.to_kakao_btn).setBackgroundResource(R.drawable.contacts_logo)
                 findViewById<RecyclerView>(R.id.detailview_add_kfriends).adapter = KDetailViewRecyclerViewAdapter()
                 findViewById<RecyclerView>(R.id.detailview_add_kfriends).layoutManager = LinearLayoutManager(this)
             }
 
             ABC = !ABC
-            Toast.makeText(this,friends_size.toString(),Toast.LENGTH_SHORT).show()
-            true
         }
 
 
@@ -128,7 +136,7 @@ class AddFriendsActivity : AppCompatActivity() {
 
             fun bind(data1 : MutableList<String?>,data2 : MutableList<String>, data3 : MutableList<Boolean>, num : Int, context : Context) {
                 textview.text = data2[num]
-                Glide.with(context).load(data1[num]).into(imageview)
+                Glide.with(context).load(data1[num]).circleCrop().into(imageview)
                 checkbox.isChecked = data3[num]
                 checkbox.setOnClickListener {
                     k_checkedList!![num] = checkbox.isChecked

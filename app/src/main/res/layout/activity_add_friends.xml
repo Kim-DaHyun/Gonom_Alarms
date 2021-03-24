@@ -6,11 +6,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddFriendsActivity">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp">
+        <ImageView
+            android:id="@+id/to_kakao_btn"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@drawable/kakao_logo"/>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/main_activity_above_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="35dp">
+            <LinearLayout
+                android:layout_marginEnd="35dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:src="@drawable/mainlogo_changeded"/>
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
+    </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="20dp"
         android:id="@+id/detailview_add_kfriends"
         android:layout_width="match_parent"
-        android:layout_height="600dp"/>
+        android:layout_height="500dp"/>
     <ImageView
         android:id="@+id/add_member_btn"
         android:layout_width="80dp"
